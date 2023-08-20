@@ -16,7 +16,7 @@ class Website():
         self.analyze_extra_tags = analyze_extra_tags
         self.follow_links = follow_links
         self.crawled_pages = []
-        self.crawled_urls = set([])
+        self.crawled_urls = set()
         self.page_queue = []
         self.wordcount = Counter()
         self.bigrams = Counter()

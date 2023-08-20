@@ -1,5 +1,4 @@
 import hashlib
-import json
 import os
 import re
 
@@ -84,7 +83,7 @@ ADDITIONAL_TAGS_XPATHS = {
     'og_image': '//meta[@property="og:image"]/@content'
 }
 
-IMAGE_EXTENSIONS = set(['.img', '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg', '.webp', '.avif',])
+IMAGE_EXTENSIONS = {'.img', '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg', '.webp', '.avif'}
 
 
 class Page():
@@ -289,7 +288,7 @@ class Page():
 
         for element in vt:
             if element.strip():
-                page_text += element.strip().lower() + u' '
+                page_text += element.strip().lower() + ' '
 
         tokens = self.tokenize(page_text)
         raw_tokens = self.raw_tokenize(page_text)
@@ -335,13 +334,13 @@ class Page():
         og_image = bs.findAll('meta', attrs={'property': 'og:image'})
 
         if len(og_title) == 0:
-            self.warn(u'Missing og:title')
+            self.warn('Missing og:title')
 
         if len(og_description) == 0:
-            self.warn(u'Missing og:description')
+            self.warn('Missing og:description')
 
         if len(og_image) == 0:
-            self.warn(u'Missing og:image')
+            self.warn('Missing og:image')
 
     def analyze_title(self):
         """
@@ -356,12 +355,12 @@ class Page():
         length = len(t)
 
         if length == 0:
-            self.warn(u'Missing title tag')
+            self.warn('Missing title tag')
             return
         elif length < 10:
-            self.warn(u'Title tag is too short (less than 10 characters): {0}'.format(t))
+            self.warn(f'Title tag is too short (less than 10 characters): {t}')
         elif length > 70:
-            self.warn(u'Title tag is too long (more than 70 characters): {0}'.format(t))
+            self.warn(f'Title tag is too long (more than 70 characters): {t}')
 
     def analyze_description(self):
         """
@@ -376,12 +375,12 @@ class Page():
         length = len(d)
 
         if length == 0:
-            self.warn(u'Missing description')
+            self.warn('Missing description')
             return
         elif length < 140:
-            self.warn(u'Description is too short (less than 140 characters): {0}'.format(d))
+            self.warn(f'Description is too short (less than 140 characters): {d}')
         elif length > 255:
-            self.warn(u'Description is too long (more than 255 characters): {0}'.format(d))
+            self.warn(f'Description is too long (more than 255 characters): {d}')
 
     def visible_tags(self, element):
         if element.parent.name in ['style', 'script', '[document]']:
@@ -405,7 +404,7 @@ class Page():
                 src = image
 
             if len(image.get('alt', '')) == 0:
-                self.warn('Image missing alt tag: {0}'.format(src))
+                self.warn(f'Image missing alt tag: {src}')
 
     def analyze_h1_tags(self, bs):
         """
@@ -427,10 +426,10 @@ class Page():
             tag_text = tag.text.lower().strip()
 
             if len(tag.get('title', '')) == 0:
-                self.warn('Anchor missing title tag: {0}'.format(tag_href))
+                self.warn(f'Anchor missing title tag: {tag_href}')
 
             if tag_text in ['click here', 'page', 'article']:
-                self.warn('Anchor text contains generic text: {0}'.format(tag_text))
+                self.warn(f'Anchor text contains generic text: {tag_text}')
 
             if self.base_domain.netloc not in tag_href and ':' in tag_href:
                 continue
