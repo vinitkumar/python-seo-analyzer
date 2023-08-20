@@ -1,4 +1,4 @@
-from seoanalyzer import analyze
+from seoanalyzer.analyzer import analyze
 
 
 def test_print_output():
